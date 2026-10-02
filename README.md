@@ -15,6 +15,9 @@ The notebook loads the dataset, preprocesses the text fields, builds TF-IDF feat
 
 This makes the project a comparison-based recommendation system rather than a single-model pipeline.
 
+## Dataset Link
+https://drive.google.com/file/d/1cCkwiVv4mgfl20ntgY3n4yApcWqqZQe6/view
+
 ## Implemented methods
 
 ### 1) Cosine similarity recommender with Nearest Neighbors
