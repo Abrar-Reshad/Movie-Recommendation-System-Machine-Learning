@@ -1,12 +1,51 @@
 # Movie Recommendation System (Machine Learning)
 
-This project builds a movie recommendation system using a content-based approach with TF-IDF and nearest-neighbor search.
+This project implements a multi-model movie recommender using movie metadata such as title, overview, genres, keywords, cast, director, vote average, and vote count.
 
 ## Overview
 
-The notebook loads a movie dataset, cleans the metadata, parses genres and other text fields, converts those fields into TF-IDF vectors, and then recommends movies using cosine similarity and KNN-based retrieval.
+The notebook loads the dataset, preprocesses the text fields, builds TF-IDF features, and then tests several recommendation strategies:
 
-It also includes a simple evaluation step using proxy labels based on shared genres to assess retrieval quality.
+1. Cosine similarity recommender with Nearest Neighbors
+2. KNN index over TF-IDF vectors
+3. Hybrid similarity using both text and voting features
+4. SVM-based genre classification
+5. SVM-gated hybrid recommender
+6. K-means clustering with cluster-aware recommendations
+
+This makes the project a comparison-based recommendation system rather than a single-model pipeline.
+
+## Implemented methods
+
+### 1) Cosine similarity recommender with Nearest Neighbors
+- Builds TF-IDF vectors from movie text fields
+- Fits a NearestNeighbors model with cosine distance
+- Recommends similar movies for a given title using cosine similarity
+
+### 2) KNN index over TF-IDF vectors
+- Uses another KNN index over the same TF-IDF matrix
+- Recommends nearest neighbors directly in the TF-IDF feature space
+
+### 3) Hybrid similarity (text + votes)
+- Combines TF-IDF text similarity with numeric movie popularity signals
+- Uses vote_average and log-transformed vote_count
+- Blends both signals using alpha/beta weights
+
+### 4) SVM
+- Builds multi-label genre targets from the movie genres
+- Trains a One-vs-Rest Linear SVM on TF-IDF features
+- Evaluates performance using precision, recall, F1, and accuracy
+
+### 5) SVM-gated hybrid recommender
+- Uses the trained SVM to predict likely genres for a query movie
+- Filters candidate movies that share predicted genres
+- Applies hybrid similarity scoring to the filtered set
+
+### 6) K-means
+- Reduces TF-IDF features with LSA (Truncated SVD)
+- Runs KMeans clustering on the reduced representation
+- Builds cluster-aware recommendation outputs
+- Provides cluster summaries and interpretability
 
 ## Project structure
 
@@ -35,11 +74,12 @@ If your dataset is in a different location, update the `CSV_PATH` variable in th
 
 1. Load the dataset
 2. Normalize column names
-3. Fix the expected schema
-4. Parse genres into clean lists
-5. Build TF-IDF features from text metadata
-6. Generate recommendations using cosine similarity / KNN
-7. Evaluate similarity quality using genre-overlap and NDCG proxy metrics
+3. Validate the movie schema
+4. Parse genres into clean list form
+5. Build TF-IDF features from multiple text columns
+6. Train and test multiple recommendation strategies
+7. Evaluate using genre-overlap and NDCG proxy metrics
+8. Cluster movies and analyze cluster structure
 
 ## Example usage
 
@@ -56,6 +96,8 @@ Open the notebook in Jupyter or VS Code and run each cell in order.
   - `keywords`
   - `cast`
   - `director`
+  - `vote_average`
+  - `vote_count`
 
 ## License
 
